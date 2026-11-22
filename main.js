@@ -4,7 +4,7 @@ function getTime() {
 }
 
 // ==========================================
-// ВИДЖЕТ 1: ПОИСК ФИЛЬМОВ И СЕРИАЛОВ (IMDb API)
+// ВИДЖЕТ 1: ПОИСК СЕРИАЛОВ (CINEMETA)
 // ==========================================
 const searchForm = document.querySelector('#search-form');
 const searchInput = document.querySelector('#show-query');
@@ -20,33 +20,33 @@ async function searchShows(query) {
     searchBtn.disabled = true;
 
     try {
-        // Прямой запрос к базе IMDb (без прокси)
-        const res = await fetch(`https://imdb.iamidiotareyoutoo.com/search?q=${encodeURIComponent(query)}`);
+        // Поиск сериалов через открытый каталог Cinemeta
+        const apiUrl = `https://v3-cinemeta.strem.io/catalog/series/top/search=${encodeURIComponent(query)}.json`;
+        const res = await fetch(apiUrl);
         if (!res.ok) throw new Error('Ошибка HTTP ' + res.status);
         
         const data = await res.json();
 
-        // Проверяем, что массив с результатами существует и не пуст
-        if (!data.description || !Array.isArray(data.description) || data.description.length === 0) {
+        // Проверка, что массив с результатами существует и не пуст
+        if (!data.metas || !Array.isArray(data.metas) || data.metas.length === 0) {
             searchStatus.textContent = 'Ничего не найдено.';
             searchStatus.classList.add('error');
             return;
         }
 
         // Выводим первые 5 результатов
-        data.description.slice(0, 5).forEach(item => {
+        data.metas.slice(0, 5).forEach(show => {
             const li = document.createElement('li');
             const info = document.createElement('span');
             
-            // У этого API поля называются '#TITLE' и '#YEAR'
-            const title = item['#TITLE'] || 'Название неизвестно';
-            const year = item['#YEAR'] || 'год неизвестен';
-            info.textContent = `${title} (${year})`;
+            // Формируем строку: Название (Год)
+            const year = show.releaseInfo || show.year || 'год неизвестен';
+            info.textContent = `${show.name} (${year})`;
             
             const addBtn = document.createElement('button');
             addBtn.textContent = '+ В список';
             addBtn.addEventListener('click', () => {
-                addToWatchlist(title);
+                addToWatchlist(show.name);
             });
 
             li.append(info, addBtn);
@@ -55,10 +55,10 @@ async function searchShows(query) {
 
         searchStatus.textContent = 'Результаты поиска:';
         searchStatus.classList.add('success');
-        searchSource.textContent = `Источник: IMDb • Обновлено: ${getTime()}`;
+        searchSource.textContent = `Источник: Cinemeta • Обновлено: ${getTime()}`;
 
     } catch (err) {
-        console.error(err); // Выведет ошибку в консоль, если что-то пойдет не так
+        console.error(err); // Выведет ошибку в консоль, если что-то пойдёт не так
         searchStatus.textContent = 'Ошибка загрузки. Попробуйте ещё раз.';
         searchStatus.classList.add('error');
         searchSource.textContent = ''; 
@@ -71,15 +71,15 @@ searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const q = searchInput.value.trim();
     if (!q) {
-        searchStatus.textContent = 'Введите название фильма или сериала.';
+        searchStatus.textContent = 'Введите название сериала.';
         searchStatus.classList.add('error');
         return;
     }
     searchShows(q);
 });
 
-// Запуск при загрузке (ищем Matrix для примера)
-searchShows('Matrix');
+// Запуск при загрузке (ищем Breaking Bad для примера)
+searchShows('Breaking Bad');
 
 // ==========================================
 // ВИДЖЕТ 2: СЛУЧАЙНЫЙ ФИЛЬМ (CINEMETA)
