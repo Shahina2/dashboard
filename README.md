@@ -7,12 +7,11 @@
 2. Откройте файл `index.html` в браузере или запустите через расширение Live Server в VS Code.
 
 ## Функции
-- Поиск сериалов: получение данных из TVmaze API по названию.
+- Поиск сериалов: получение данных из Cinemeta по названию.
 - Случайный фильм: загрузка случайной карточки из каталога Cinemeta.
 - Мой список: локальное сохранение фильмов в `localStorage` (добавление и удаление).
 
 ## Источники данных (API)
-- [TVmaze API](https://www.tvmaze.com/api) - ключевые поля: `name`, `premiered`, `genres`, `summary`.
 - [Cinemeta](https://v3-cinemeta.strem.io/) - ключевые поля: `name`, `description`, `releaseInfo`, `imdbRating`.
 
 ## Ограничения
