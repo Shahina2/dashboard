@@ -1,0 +1,133 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+    padding: 1rem;
+    line-height: 1.5;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.25rem; margin-bottom: 1rem; color: #e94560; }
+
+.dashboard {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr; /* Мобильная версия: одна колонка */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.widget {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+input, button {
+    font: inherit;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #0f3460;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+input {
+    background: #0f3460;
+    color: #fff;
+}
+
+button {
+    background: #e94560;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+button:hover:not(:disabled) { background: #c73652; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.status {
+    min-height: 1.5rem;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.status.error { color: #ff6b6b; }
+.status.success { color: #51cf66; }
+
+.results-list {
+    list-style: none;
+    margin: 1rem 0;
+}
+
+.results-list li {
+    background: #0f3460;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.results-list button {
+    width: auto;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+    background: #c73652;
+}
+
+.source {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 0.5rem;
+    border-top: 1px solid #0f3460;
+    padding-top: 0.5rem;
+}
+
+.movie-card {
+    background: #0f3460;
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.movie-card h3 { margin-bottom: 0.5rem; color: #e94560; }
+.movie-card p { font-size: 0.9rem; margin-bottom: 0.25rem; }
+
+/* Планшет и десктоп */
+@media (min-width: 768px) {
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    #watchlist-widget {
+        grid-column: span 2;
+    }
+}
+
+@media (min-width: 1280px) {
+    .dashboard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    #watchlist-widget {
+        grid-column: span 1;
+    }
+}

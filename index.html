@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кино-вечер</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🎬 Кино-вечер</h1>
+        <p>Найди, что посмотреть сегодня</p>
+    </header>
+
+    <main class="dashboard">
+        <!-- Виджет 1: Поиск сериалов (TVmaze) -->
+        <section class="widget" id="search-widget">
+            <h2>Поиск сериалов</h2>
+            <form id="search-form">
+                <label for="show-query">Название сериала</label>
+                <input type="text" id="show-query" placeholder="Например: Breaking Bad" value="Friends">
+                <button type="submit" id="search-btn">Найти</button>
+            </form>
+            <div id="search-status" class="status" aria-live="polite"></div>
+            <ul id="search-results" class="results-list"></ul>
+            <p id="search-source" class="source"></p>
+        </section>
+
+        <!-- Виджет 2: Случайный фильм (Cinemeta) -->
+        <section class="widget" id="random-widget">
+            <h2>Случайный фильм</h2>
+            <button id="random-btn">Показать фильм</button>
+            <div id="random-status" class="status" aria-live="polite"></div>
+            <div id="random-result" class="movie-card"></div>
+            <p id="random-source" class="source"></p>
+        </section>
+
+        <!-- Виджет 3: Мой список (Локально) -->
+        <section class="widget" id="watchlist-widget">
+            <h2>Мой список «Посмотреть»</h2>
+            <form id="watchlist-form">
+                <label for="watchlist-input">Добавить фильм</label>
+                <input type="text" id="watchlist-input" placeholder="Название...">
+                <button type="submit">Добавить</button>
+            </form>
+            <ul id="watchlist" class="results-list"></ul>
+        </section>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
