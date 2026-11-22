@@ -4,7 +4,7 @@ function getTime() {
 }
 
 // ==========================================
-// ВИДЖЕТ 1: ПОИСК СЕРИАЛОВ (TVMAZE)
+// ВИДЖЕТ 1: ПОИСК ФИЛЬМОВ И СЕРИАЛОВ (IMDb API)
 // ==========================================
 const searchForm = document.querySelector('#search-form');
 const searchInput = document.querySelector('#show-query');
@@ -20,27 +20,33 @@ async function searchShows(query) {
     searchBtn.disabled = true;
 
     try {
-       const apiUrl = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`;
-const res = await fetch(`https://api.codetabs.com/proxy?quest=${encodeURIComponent(apiUrl)}`);
+        // Прямой запрос к базе IMDb (без прокси)
+        const res = await fetch(`https://imdb.iamidiotareyoutoo.com/search?q=${encodeURIComponent(query)}`);
         if (!res.ok) throw new Error('Ошибка HTTP ' + res.status);
+        
         const data = await res.json();
 
-        if (!Array.isArray(data) || data.length === 0) {
+        // Проверяем, что массив с результатами существует и не пуст
+        if (!data.description || !Array.isArray(data.description) || data.description.length === 0) {
             searchStatus.textContent = 'Ничего не найдено.';
             searchStatus.classList.add('error');
             return;
         }
 
-        data.slice(0, 5).forEach(item => {
-            const show = item.show;
+        // Выводим первые 5 результатов
+        data.description.slice(0, 5).forEach(item => {
             const li = document.createElement('li');
             const info = document.createElement('span');
-            info.textContent = `${show.name} (${show.premiered ? show.premiered.slice(0, 4) : 'год неизвестен'})`;
+            
+            // У этого API поля называются '#TITLE' и '#YEAR'
+            const title = item['#TITLE'] || 'Название неизвестно';
+            const year = item['#YEAR'] || 'год неизвестен';
+            info.textContent = `${title} (${year})`;
             
             const addBtn = document.createElement('button');
             addBtn.textContent = '+ В список';
             addBtn.addEventListener('click', () => {
-                addToWatchlist(show.name);
+                addToWatchlist(title);
             });
 
             li.append(info, addBtn);
@@ -49,12 +55,13 @@ const res = await fetch(`https://api.codetabs.com/proxy?quest=${encodeURICompone
 
         searchStatus.textContent = 'Результаты поиска:';
         searchStatus.classList.add('success');
-        searchSource.textContent = `Источник: TVmaze • Обновлено: ${getTime()}`;
+        searchSource.textContent = `Источник: IMDb • Обновлено: ${getTime()}`;
 
     } catch (err) {
+        console.error(err); // Выведет ошибку в консоль, если что-то пойдет не так
         searchStatus.textContent = 'Ошибка загрузки. Попробуйте ещё раз.';
         searchStatus.classList.add('error');
-        searchSource.textContent = ''; // Сбрасываем источник, если данные не получены
+        searchSource.textContent = ''; 
     } finally {
         searchBtn.disabled = false;
     }
@@ -64,15 +71,15 @@ searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const q = searchInput.value.trim();
     if (!q) {
-        searchStatus.textContent = 'Введите название сериала.';
+        searchStatus.textContent = 'Введите название фильма или сериала.';
         searchStatus.classList.add('error');
         return;
     }
     searchShows(q);
 });
 
-// Запуск при загрузке
-searchShows('Friends');
+// Запуск при загрузке (ищем Matrix для примера)
+searchShows('Matrix');
 
 // ==========================================
 // ВИДЖЕТ 2: СЛУЧАЙНЫЙ ФИЛЬМ (CINEMETA)
