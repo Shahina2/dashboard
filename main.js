@@ -21,7 +21,7 @@ async function searchShows(query) {
 
     try {
        const apiUrl = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`;
-const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
+const res = await fetch(`https://api.codetabs.com/proxy?quest=${encodeURIComponent(apiUrl)}`);
         if (!res.ok) throw new Error('Ошибка HTTP ' + res.status);
         const data = await res.json();
 
