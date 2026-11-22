@@ -20,7 +20,8 @@ async function searchShows(query) {
     searchBtn.disabled = true;
 
     try {
-        const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`);
+       const apiUrl = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`;
+const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
         if (!res.ok) throw new Error('Ошибка HTTP ' + res.status);
         const data = await res.json();
 
